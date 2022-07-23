@@ -1,17 +1,23 @@
-import React, {useLayoutEffect} from 'react';
+import React, {useEffect, useLayoutEffect} from 'react';
 import {FlatList, StyleSheet} from 'react-native';
 import colors from "../constans/colors";
 import {useAppNavigation} from "../navigation/types";
 import {CustomHeaderButton} from "../components/CustomHeaderButton";
 import {HeaderButtons, Item} from "react-navigation-header-buttons";
-import {useAppSelector} from "../store/store";
+import {useAppDispatch, useAppSelector} from "../store/store";
 import {PlaceItem} from "../components/PlaceItem";
+import {fetchPlacesTh} from "../store/placeReducer";
 
 type PlaceListScreenPropsType = {}
 
 export const PlaceListScreen = ({}: PlaceListScreenPropsType) => {
     const places = useAppSelector(state => state.placeReducer.places)
     const navigation = useAppNavigation()
+    const dispatch = useAppDispatch()
+
+    useEffect(() => {
+        dispatch(fetchPlacesTh())
+    }, [dispatch])
 
     useLayoutEffect(() => {
         navigation.setOptions({
@@ -31,7 +37,7 @@ export const PlaceListScreen = ({}: PlaceListScreenPropsType) => {
 
     return (
         <FlatList data={places} keyExtractor={(item) => item.id} renderItem={({item}) =>
-            <PlaceItem address={"j"} title={item.title} image={"g"}
+            <PlaceItem address={"j"} title={item.title} image={item.imageUrl}
                        onSelect={() => navigation.navigate("PlaceDetailScreen", {title: item.title, id: item.id})}/>
         }/>
     );

@@ -3,6 +3,13 @@ import {PlaceNavigator} from "./navigation/PlaceNavigator";
 import {NavigationContainer} from "@react-navigation/native";
 import {Provider} from "react-redux";
 import {store} from "./store/store";
+import {init} from "./utils/db";
+
+
+init().then(() => {
+}).catch((err) => {
+    console.log("Error in initialized DB", err);
+})
 
 export default function App() {
     return (

@@ -4,14 +4,17 @@ import {AppText} from "../components/AppText";
 import colors from "../constans/colors";
 import {useAppNavigation} from "../navigation/types";
 import {useAppDispatch} from "../store/store";
-import {addPlaceAC} from "../store/placeReducer";
+import {addPlaceAC, addPlaceTh} from "../store/placeReducer";
 import {ImageSelector} from "../components/ImageSelector";
+import {LocationComponent} from "../components/LocationComponent";
 
 type NewPlaceScreenPropsType = {}
 
 export const NewPlaceScreen = ({}: NewPlaceScreenPropsType) => {
     const navigation = useAppNavigation()
     const [valueInput, setValueInput] = useState("");
+    const [chosenImage, setChosenImage] = useState("");
+
     const dispatch = useAppDispatch()
 
 
@@ -32,17 +35,21 @@ export const NewPlaceScreen = ({}: NewPlaceScreenPropsType) => {
     }, [navigation]);
 
     const savePlace = () => {
-        dispatch(addPlaceAC({title:valueInput}))
+        dispatch(addPlaceTh({title: valueInput, image:chosenImage}))
         setValueInput("")
         navigation.goBack()
     }
 
+    const onImageTaken = (uri: string) => {
+        setChosenImage(uri)
+    }
 
     return (
         <ScrollView style={styles.container}>
             <AppText style={styles.text}>Title</AppText>
-            <TextInput value={valueInput} onChangeText={(text)=> setValueInput(text)} style={styles.input}/>
-            <ImageSelector/>
+            <TextInput value={valueInput} onChangeText={(text) => setValueInput(text)} style={styles.input}/>
+            <ImageSelector onImageTaken={onImageTaken}/>
+            <LocationComponent/>
             <Button title={"Add New City"} color={colors.primary} onPress={savePlace}/>
 
         </ScrollView>
