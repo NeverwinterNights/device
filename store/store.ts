@@ -2,11 +2,12 @@ import {combineReducers, configureStore} from '@reduxjs/toolkit'
 import {TypedUseSelectorHook, useDispatch, useSelector} from "react-redux";
 import thunkMiddleware from 'redux-thunk'
 import {placeReducer} from "./placeReducer";
+import {mapReducer} from "./mapReducer";
 
 
 const rootReducer = combineReducers({
-    placeReducer:placeReducer
-
+    placeReducer:placeReducer,
+    mapReducer:mapReducer
 })
 
 

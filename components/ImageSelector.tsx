@@ -13,20 +13,7 @@ type ImageSelectorPropsType = {
 export const ImageSelector = ({onImageTaken}: ImageSelectorPropsType) => {
     const [pickedImage, setPickedImage] = useState("");
 
-    // const addPermissions = async () => {
-    //     const result = await Permissions.askAsync(Permissions.CAMERA, Permissions.MEDIA_LIBRARY)
-    //     if (result.status === "granted") {
-    //         Alert.alert("No permissions for camera")
-    //         return false
-    //     }
-    //     return true
-    // }
-
     const imageHandler = async () => {
-        // const permissionToCamera = await addPermissions()
-        // if (!permissionToCamera) {
-        //     return
-        // }
         const image: ImagePickerResult = await ImagePicker.launchCameraAsync({
             allowsEditing: true,
             aspect: [16, 9],

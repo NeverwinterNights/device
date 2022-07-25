@@ -1,24 +1,26 @@
 import React from 'react';
-import {Image, TouchableOpacity} from 'react-native';
-import { StyleSheet, Text, View } from 'react-native';
+import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import colors from "../constans/colors";
+import {LocationType} from "../hooks/useLocation";
 
 type PlaceItemPropsType = {
-    onSelect:()=> void
-    title:string
-    address:string
-    image:string
+    onSelect: () => void
+    title: string
+    address: LocationType
+    image: string
 }
 
-export const PlaceItem = ({onSelect, title, address, image}:PlaceItemPropsType) => {
- return (
-     <TouchableOpacity onPress={onSelect} style={styles.placeItem}>
-         <Image style={styles.image} source={{ uri: image }} />
-         <View style={styles.infoContainer}>
-             <Text style={styles.title}>{title}</Text>
-             <Text style={styles.address}>{address}</Text>
-         </View>
-     </TouchableOpacity>
+
+export const PlaceItem = ({onSelect, title, address, image}: PlaceItemPropsType) => {
+    return (
+        <TouchableOpacity onPress={onSelect} style={styles.placeItem}>
+            <Image style={styles.image} source={{uri: image}}/>
+            <View style={styles.infoContainer}>
+                <Text style={styles.title}>{title}</Text>
+                <Text
+                    style={styles.address}>{`Latitude is ${address.latitude}, longitude is - ${address.longitude}`}</Text>
+            </View>
+        </TouchableOpacity>
     );
 };
 

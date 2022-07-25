@@ -3,26 +3,33 @@ import {ActivityIndicator, Alert, Button, StyleSheet, View} from 'react-native';
 import {AppText} from "./AppText";
 import colors from "../constans/colors";
 import * as Location from "expo-location";
+import {LocationType} from "../screens/NewPlaceScreen";
 
-export const LocationComponent = () => {
+type LocationComponentType ={
+    getLocation: (value:LocationType)=>void
+}
+
+
+
+export const LocationComponent = ({getLocation}:LocationComponentType) => {
 
     const [location, setLocation] = useState({});
     const [isFetching, setIsFetching] = useState(false);
 
-    console.log(isFetching);
+
     const getLocationHandler = async () => {
         setIsFetching(true)
         try {
             const {granted} = await Location.requestForegroundPermissionsAsync()
             if (!granted) return
             const {coords: {longitude, latitude}}: Location.LocationObject = await Location.getCurrentPositionAsync()
-            setLocation({latitude, longitude})
+            setIsFetching(false)
+            getLocation({latitude, longitude})
         } catch (error) {
             Alert.alert("Error with getting location", error);
         }
-        setIsFetching(false)
     }
-    console.log(location);
+
 
     return (
         <View style={styles.container}>

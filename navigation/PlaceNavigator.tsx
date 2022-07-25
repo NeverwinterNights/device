@@ -18,8 +18,9 @@ export const PlaceNavigator = () => (
         headerTitleAlign: "center"
     }}>
         <Stack.Screen options={{headerTitle:"All Places"}} name="PlaceListScreen" component={PlaceListScreen}/>
-        <Stack.Screen name="MapScreen" component={MapScreen}/>
         <Stack.Screen name="NewPlaceScreen" component={NewPlaceScreen}/>
         <Stack.Screen name="PlaceDetailScreen" component={PlaceDetailScreen}/>
+        <Stack.Screen options={{headerTitle:"Pick Location on map"}} name="MapScreen" component={MapScreen}/>
+
     </Stack.Navigator>
 )

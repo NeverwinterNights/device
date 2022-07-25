@@ -1,5 +1,5 @@
 import React, {useEffect, useLayoutEffect} from 'react';
-import {FlatList, StyleSheet} from 'react-native';
+import {FlatList, StyleSheet, View} from 'react-native';
 import colors from "../constans/colors";
 import {useAppNavigation} from "../navigation/types";
 import {CustomHeaderButton} from "../components/CustomHeaderButton";
@@ -7,6 +7,7 @@ import {HeaderButtons, Item} from "react-navigation-header-buttons";
 import {useAppDispatch, useAppSelector} from "../store/store";
 import {PlaceItem} from "../components/PlaceItem";
 import {fetchPlacesTh} from "../store/placeReducer";
+import {AppText} from "../components/AppText";
 
 type PlaceListScreenPropsType = {}
 
@@ -36,10 +37,23 @@ export const PlaceListScreen = ({}: PlaceListScreenPropsType) => {
 
 
     return (
-        <FlatList data={places} keyExtractor={(item) => item.id} renderItem={({item}) =>
-            <PlaceItem address={"j"} title={item.title} image={item.imageUrl}
-                       onSelect={() => navigation.navigate("PlaceDetailScreen", {title: item.title, id: item.id})}/>
-        }/>
+        <>
+            {
+                Object.keys(places).length === 0 ?
+                <View style={{flex: 1, alignItems: "center", justifyContent: "center",}}><AppText>No added
+                    places</AppText></View>
+                :
+                <FlatList data={places} keyExtractor={(item) => item.id} renderItem={({item}) =>
+                    <PlaceItem address={item.location} title={item.title} image={item.imageUrl}
+                               onSelect={() => navigation.navigate("PlaceDetailScreen", {
+                                   title: item.title,
+                                   id: item.id,
+                                   url:item.imageUrl,
+                                   location:item.location
+                               })}/>
+                }/>
+            }
+        </>
     );
 };
 

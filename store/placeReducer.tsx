@@ -5,6 +5,7 @@ import {Alert} from "react-native";
 import {fetchPlaces, insertPlace} from "../utils/db";
 import {SQLResultSetRowList} from "expo-sqlite/src/SQLite.types";
 import {SQLResultSet} from "expo-sqlite";
+import {LocationType} from "../screens/NewPlaceScreen";
 
 
 type initialStateType = {
@@ -23,11 +24,11 @@ const initialState: initialStateType = {
 }
 
 
-export const addPlaceAC = createAction<{ id: number, title: string, image: string }>("place/addPlaceAC")
+export const addPlaceAC = createAction<{ id: number, title: string, image: string, location: LocationType }>("place/addPlaceAC")
 export const fetchPlacesAC = createAction<{ places: PlaceType[] }>("place/fetchPlacesAC")
 
 
-export const addPlaceTh = createAsyncThunk("place/addPlaceTh", async (param: { title: string, image: string }, {
+export const addPlaceTh = createAsyncThunk("place/addPlaceTh", async (param: { title: string, image: string, location: LocationType }, {
     dispatch,
     rejectWithValue
 }) => {
@@ -42,12 +43,12 @@ export const addPlaceTh = createAsyncThunk("place/addPlaceTh", async (param: { t
             from: param.image,
             to: path
         })
-        const result: SQLResultSet = await insertPlace(param.title, path, "fake address", 14.5, 55.7)
+        const result: SQLResultSet = await insertPlace(param.title, path, "fake address", param.location.latitude, param.location.longitude)
         if (!result.insertId) {
             return
         }
-        dispatch(addPlaceAC({id: result.insertId, title: param.title, image: path}))
-        return {id: result.insertId, title: param.title, image: path}
+        dispatch(addPlaceAC({id: result.insertId, title: param.title, image: path, location: param.location}))
+        return {id: result.insertId, title: param.title, image: path, location: param.location}
     } catch (error) {
         Alert.alert("Error saving file", error)
     }
@@ -76,12 +77,15 @@ const slice = createSlice({
         builder
             .addCase(addPlaceTh.fulfilled, (state, action) => {
                 if (action.payload && action.payload.title && action.payload.image) {
-                    state.places = [...state.places, new Place(String(action.payload.id), action.payload.title, action.payload.image)]
+                    state.places = [...state.places, new Place(String(action.payload.id), action.payload.title, action.payload.image, action.payload.location)]
                 }
             })
             .addCase(fetchPlacesTh.fulfilled, (state, action) => {
                 if (action.payload) {
-                    state.places = action.payload.map((place)=> new Place(place.id.toString(), place.title, place.imageUri))
+                    state.places = action.payload.map((place) => new Place(place.id.toString(), place.title, place.imageUri, {
+                        latitude: place.lat,
+                        longitude: place.lng
+                    }))
                 }
             })
     },
